@@ -1,13 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 [Flags]
 public enum Direction
 {
-    None = 0,
     North = 0b1000,
     East = 0b0100,
     South = 0b0010,
@@ -16,6 +12,22 @@ public enum Direction
 
 public class Room : MonoBehaviour
 {
-    public Direction doorOpenings;
+    public Direction entrances;
+    [HideInInspector] public Direction lockedDoors;
+
+    public void LockDoor(Direction direction)
+    {
+        lockedDoors |= direction;
+    }
+
+    public void UnlockDoor(Direction direction)
+    {
+        lockedDoors &= ~direction;
+    }
+
+    public bool IsLocked(Direction direction)
+    {
+        return (lockedDoors & direction) != 0;
+    }
 
 }
