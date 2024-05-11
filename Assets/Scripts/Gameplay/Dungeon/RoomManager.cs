@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DungeonRoomManager : MonoBehaviour
+public class RoomManager : MonoBehaviour
 {
+    public int numRooms = 10;
     public Room startRoom;
     [HideInInspector] public Room endRoom;
     private Dictionary<Direction, Room> neighbors = new Dictionary<Direction, Room>();
