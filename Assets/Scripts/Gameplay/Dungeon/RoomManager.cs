@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DungeonRoomManager : Singleton<DungeonManager>
+public class DungeonRoomManager : MonoBehaviour
 {
-    public DungeonRoom startRoom;
-    public DungeonRoom endRoom; 
+    public Room startRoom;
+    public Room endRoom; 
 }
