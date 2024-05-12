@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using System.Linq;
+
 
 public class PathGenerator
 {
@@ -35,7 +35,7 @@ public static class Direction2D
 
     public static Vector2Int GetRandomDirection()
     {
-        return directions[UnityEngine.Random.Range(0, directions.Count)];
+        return directions[Random.Range(0, directions.Count)];
     }
 }
 
@@ -70,9 +70,126 @@ public class RoomManager : MonoBehaviour
             var path = PathGenerator.RandomWalk(currentPosition, walkLength);
             floorPositions.UnionWith(path);
             if (startRandomlyEachIteration)
-                currentPosition = floorPositions.ElementAt(UnityEngine.Random.Range(0, floorPositions.Count));
+                currentPosition = floorPositions.ElementAt(Random.Range(0, floorPositions.Count));
         }
 
         return floorPositions;
     }
 }
+
+
+// public class RoomManager : MonoBehaviour
+// {
+//     public int numRooms = 50;
+//     public Room startRoom;
+//     [HideInInspector] public Room endRoom;
+    
+//     [SerializeField] private RoomAssets roomAssets;
+
+//     private Dictionary<Vector3, Room> placedRoomPositions = new Dictionary<Vector3, Room>();
+//     private Direction previousDirection;
+
+//     public void Start()
+//     {
+//         Spawn();
+//     }
+
+//     public void Spawn()
+//     {
+//         placedRoomPositions.Clear();
+//         Room current = startRoom;
+
+//         for (int i = 0; i < numRooms; i++)
+//         {
+//             var direction = GetRandomDirection(current);
+            
+//             Debug.Log($"{current} chose {direction}");
+
+//             if (direction == Direction.None)
+//             {
+//                 Debug.Log($"direction is none. Breaking at {current}");
+//                 break;
+//             }
+//             GameObject roomPrefab = GetRoomPrefab(direction);
+//             if (roomPrefab == null)
+//             {
+//                 Debug.Log($"no existing roomPrefab. Breaking at {current}");
+//                 break;
+//             }
+
+//             var position = GetNeighborPosition(current, direction);
+//             if (placedRoomPositions.TryGetValue(position, out Room existing))
+//             {
+//                 Debug.Log($"But there's a room there, so we're moving there");
+//                 current = existing;
+
+//             }
+//             else
+//             {
+//                 var room = Instantiate(roomPrefab, position, Quaternion.identity)
+//                     .GetComponent<Room>();
+
+//                 placedRoomPositions.Add(position, room);
+//                 current = room;
+//             }
+//         }
+//     }
+
+//     private Direction GetRandomDirection(Room room)
+//     {
+//         Direction entrances = room.entrances;
+//         List<Direction> eligibleDirections = new List<Direction>();
+
+//         foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+//         {
+//             if ((entrances & direction) == 0)
+//                 continue;
+
+//             eligibleDirections.Add(direction);
+//         }
+
+//         if (eligibleDirections.Count == 0)
+//             return Direction.None;
+
+//         return eligibleDirections[UnityEngine.Random.Range(0, eligibleDirections.Count)];
+//     }
+
+//     private GameObject GetRoomPrefab(Direction direction)
+//     {
+//         switch (direction)
+//         {
+//             case Direction.North:
+//                 return GetRandomRoom(roomAssets.southRooms);
+//             case Direction.South:
+//                 return GetRandomRoom(roomAssets.northRooms);
+//             case Direction.East:
+//                 return GetRandomRoom(roomAssets.westRooms);
+//             case Direction.West:
+//                 return GetRandomRoom(roomAssets.eastRooms);
+//         }
+
+//         return null;
+//     }
+    
+//     private GameObject GetRandomRoom(List<RoomAssetInfo> rooms)
+//     {
+//         return rooms[UnityEngine.Random.Range(0, rooms.Count)].roomPrefab;
+//     }
+
+//     private Vector3 GetNeighborPosition(Room neighbor, Direction direction)
+//     {
+//         switch (direction)
+//         {
+//             case Direction.North:
+//                 return neighbor.transform.position + new Vector3(0, 1, 0);
+//             case Direction.South:
+//                 return neighbor.transform.position + new Vector3(0, -1, 0);
+//             case Direction.East:
+//                 return neighbor.transform.position + new Vector3(1, 0, 0);
+//             case Direction.West:
+//                 return neighbor.transform.position + new Vector3(-1, 0, 0);
+//         }
+
+//         return Vector3.zero;
+//     }
+// }
