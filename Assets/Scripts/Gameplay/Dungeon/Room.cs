@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Flags]
 public enum Direction
 {
+    None = 0,
     North = 0b1000,
     East = 0b0100,
     South = 0b0010,
@@ -30,4 +32,5 @@ public class Room : MonoBehaviour
         return (lockedDoors & direction) != 0;
     }
 
+    public override string ToString() => $"{name} at {transform.position}";
 }
