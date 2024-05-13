@@ -1,13 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Net.WebSockets;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class DungeonGenerator : MonoBehaviour
 {
     public int numRooms = 20;
+    public int combatRoomsPercentage = 5;
     public Vector2Int startPosition = Vector2Int.zero;
     public Direction startDirections = Direction.All;
     public RoomAssets roomAssets;
@@ -25,18 +24,15 @@ public class DungeonGenerator : MonoBehaviour
         roomAssets.CreateSpriteLookup();
         GenerateDungeon();
 
-
-        for(int i = 0; i < rooms.Count; i++)
-        {
-            CreateRoom(rooms[i], i);
-        }
+        foreach (var room in rooms)
+            CreateRoom(room);
     }
 
     void GenerateDungeon()
     {
         startRoom = new Room(startPosition, startDirections);
+        startRoom.roomType = RoomType.Start;
         rooms.Add(startRoom);
-
         while (rooms.Count < numRooms)
         {
             Room prevRoom = rooms[rooms.Count - 1];
@@ -48,12 +44,13 @@ public class DungeonGenerator : MonoBehaviour
                 Room newRoom = new Room(newPosition, GetRandomDirections(entrance.GetOppositeDirection()));
                 ConnectRooms(prevRoom, newRoom, entrance);
                 rooms.Add(newRoom);
-
                 bossRoom = newRoom;
             }
         }
 
+        bossRoom.roomType = RoomType.Boss;
         CloseDungeon();
+        AddRoomTypes();
     }
 
     Direction GetRandomEntrance(Room room)
@@ -134,9 +131,31 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-    public void CreateRoom(Room room, int index)
+    void AddRoomTypes()
     {
-        var renderer = new GameObject(nameof(room), typeof(SpriteRenderer))
+        HashSet<Room> processedRooms = new HashSet<Room>();
+
+        AddRoomType(RoomType.Health, 1, processedRooms);
+        AddRoomType(RoomType.Treasure, 1, processedRooms);
+        AddRoomType(RoomType.Combat, Mathf.CeilToInt(numRooms * combatRoomsPercentage / 100f), processedRooms);
+    }
+
+    void AddRoomType(RoomType roomType, int numRooms, HashSet<Room> processed)
+    {
+        for (int i = 0; i < numRooms; i++)
+        {
+            var selectedRoom = rooms[Random.Range(1, rooms.Count - 2)]; // dont select start or boss room.
+            while (processed.Contains(selectedRoom))
+                selectedRoom = rooms[Random.Range(1, rooms.Count - 2)];
+        
+            selectedRoom.roomType = roomType;
+            processed.Add(selectedRoom);
+        }
+    }
+
+    public void CreateRoom(Room room)
+    {
+        var renderer = new GameObject(room.roomType.ToString(), typeof(SpriteRenderer))
             .GetComponent<SpriteRenderer>();
         
         if (roomAssets.spriteLookup.TryGetValue(room.entrances, out Sprite sprite))
@@ -144,11 +163,6 @@ public class DungeonGenerator : MonoBehaviour
             renderer.sprite = sprite;
             renderer.transform.position = room.position.AsVector3();
             renderer.transform.SetParent(this.transform);
-
-            if (index == 0)
-                renderer.color = Color.green;
-            if (index == rooms.Count - 1)
-                renderer.color = Color.blue;
         }
         else
             Debug.Log($"Didn't find sprite for {room} with {room.entrances}");

@@ -167,7 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436265822f9a59c409654c61f0f0d2b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numRooms: 20
+  numRooms: 50
+  combatRoomsPercentage: 5
   startPosition: {x: 0, y: 0}
   startDirections: -1
   roomAssets: {fileID: 11400000, guid: 29af32f18c51edf44918d3b20969c6ed, type: 2}
