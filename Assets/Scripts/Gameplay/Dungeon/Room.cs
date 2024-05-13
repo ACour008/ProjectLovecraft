@@ -2,21 +2,22 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Flags]
+[Flags, Serializable]
 public enum Direction
 {
     None = 0,
-    All = North | East | West | South,
     North = 0b1000,
     East = 0b0100,
     South = 0b0010,
-    West = 0b0001
+    West = 0b0001,
+    All = North | East | West | South
 }
 
-public class Room : IEquatable<Room>
+public class Room
 {
     public Vector2Int position;
     public Direction entrances;
+    public Dictionary<Direction, Room> neighbors = new Dictionary<Direction, Room>();
     [HideInInspector] public Direction lockedDoors;
 
     public Room(Vector2Int position, Direction entrances)
@@ -45,27 +46,6 @@ public class Room : IEquatable<Room>
     public bool IsLocked(Direction direction)
     {
         return (lockedDoors & direction) != 0;
-    }
-
-    public override int GetHashCode()
-    {
-        return position.GetHashCode();
-    }
-
-    public override bool Equals(object obj)
-    {
-        if  (obj == null || !(obj is Room))
-            return false;
-
-        return this.position.Equals(((Room)obj).position);
-    }
-
-    public bool Equals(Room other)
-    {
-        if (other == null)
-            return false;
-        
-        return this.position.Equals(other.position);
     }
 
     public override string ToString() => $"Room at {position}";
