@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436265822f9a59c409654c61f0f0d2b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numRooms: 50
+  numRooms: 25
   combatRoomsPercentage: 5
   startPosition: {x: 0, y: 0}
   startDirections: -1
@@ -268,7 +268,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attenuationObject: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

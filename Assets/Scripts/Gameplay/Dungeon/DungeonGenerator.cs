@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,10 +8,11 @@ public class DungeonGenerator : MonoBehaviour
 {
     public int numRooms = 20;
     public int combatRoomsPercentage = 5;
+    public int capRoomPercentage = 25;
     public Vector2Int startPosition = Vector2Int.zero;
     public Direction startDirections = Direction.All;
     public RoomAssets roomAssets;
-    private List<Room> rooms = new List<Room>();
+    private Dictionary<Vector2Int, Room> rooms = new Dictionary<Vector2Int, Room>();
 
 
     private Room startRoom;
@@ -24,31 +26,38 @@ public class DungeonGenerator : MonoBehaviour
         roomAssets.CreateSpriteLookup();
         GenerateDungeon();
 
-        foreach (var room in rooms)
+        foreach (var room in rooms.Values)
             CreateRoom(room);
     }
 
     void GenerateDungeon()
     {
-        startRoom = new Room(startPosition, startDirections);
+        startRoom = bossRoom = new Room(startPosition, startDirections);
         startRoom.roomType = RoomType.Start;
-        rooms.Add(startRoom);
-        while (rooms.Count < numRooms)
+        rooms.Add(startPosition, startRoom);
+
+        int maxAttempts = 100;
+        int attempts = 0;
+        while (rooms.Count < numRooms && attempts < maxAttempts)
         {
-            Room prevRoom = rooms[rooms.Count - 1];
-            Direction entrance = GetRandomEntrance(prevRoom);
-            Vector2Int newPosition = prevRoom.position + entrance.GetDirectionVector();
+            Direction entrance = GetRandomEntrance(bossRoom);
+            Vector2Int newPosition = bossRoom.position + entrance.GetDirectionVector();
 
             if (!IsPositionOccupied(newPosition))
             {
                 Room newRoom = new Room(newPosition, GetRandomDirections(entrance.GetOppositeDirection()));
-                ConnectRooms(prevRoom, newRoom, entrance);
-                rooms.Add(newRoom);
+                ConnectRooms(bossRoom, newRoom, entrance);
+                rooms.Add(newPosition, newRoom);
                 bossRoom = newRoom;
+            }
+            else
+            {
+                attempts++;
             }
         }
 
         bossRoom.roomType = RoomType.Boss;
+        AddCapRooms();
         CloseDungeon();
         AddRoomTypes();
     }
@@ -74,13 +83,20 @@ public class DungeonGenerator : MonoBehaviour
 
     bool IsPositionOccupied(Vector2Int position)
     {
-        foreach (Room room in rooms)
+        return rooms.TryGetValue(position, out _);
+    }
+
+    List<Direction> GetAvailableEntrances(Room room)
+    {
+        List<Direction> availableEntrances = new List<Direction>();
+
+        foreach (Direction direction in Enum.GetValues(typeof(Direction)))
         {
-            if (room.position == position)
-                return true;
+            if ((room.entrances & direction) != 0 && !IsPositionOccupied(room.position + direction.GetDirectionVector()))
+                availableEntrances.Add(direction);
         }
 
-        return false;
+        return availableEntrances;
     }
 
     Direction GetRandomDirections(Direction required)
@@ -113,9 +129,40 @@ public class DungeonGenerator : MonoBehaviour
         other.neighbors[entrance.GetOppositeDirection()] = room;
     }
 
+    void AddCapRooms()
+    {
+        var capRooms = new List<Room>();
+        float chanceOfCreation = capRoomPercentage / 100f;
+        foreach (var room in rooms.Values)
+        {
+            if (room.roomType == RoomType.Boss)
+                continue; 
+
+            foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+            {
+                if (direction == Direction.None || direction == Direction.All)
+                    continue;
+                
+                if (chanceOfCreation >= Random.Range(0f, 1f))
+                    continue;
+
+                Vector2Int position = room.position + direction.GetDirectionVector();
+                if ((room.entrances & direction) != 0 && !IsPositionOccupied(position))
+                {
+                    var newRoom = new Room(position, direction.GetOppositeDirection());
+                    ConnectRooms(room, newRoom, direction);
+                    capRooms.Add(newRoom);
+                }
+            }
+        }
+
+        foreach(var room in capRooms)
+            rooms[room.position] = room;
+    }
+
     void CloseDungeon()
     {
-        foreach (Room room in rooms)
+        foreach (Room room in rooms.Values)
         {
             Direction newEntrances = room.entrances;
             foreach (Direction direction in Enum.GetValues(typeof(Direction)))
@@ -144,15 +191,16 @@ public class DungeonGenerator : MonoBehaviour
     {
         for (int i = 0; i < numRooms; i++)
         {
-            var selectedRoom = rooms[Random.Range(1, rooms.Count - 2)]; // dont select start or boss room.
+            var selectedRoom = rooms.ElementAt(Random.Range(1, rooms.Count - 2)).Value; // dont select start or boss room.
             while (processed.Contains(selectedRoom))
-                selectedRoom = rooms[Random.Range(1, rooms.Count - 2)];
+                selectedRoom = rooms.ElementAt(Random.Range(1, rooms.Count - 2)).Value;
         
             selectedRoom.roomType = roomType;
             processed.Add(selectedRoom);
         }
     }
 
+    // This should go in RoomManager
     public void CreateRoom(Room room)
     {
         var renderer = new GameObject(room.roomType.ToString(), typeof(SpriteRenderer))
