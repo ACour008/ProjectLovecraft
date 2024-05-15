@@ -164,14 +164,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 82835348}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 436265822f9a59c409654c61f0f0d2b0, type: 3}
+  m_Script: {fileID: 11500000, guid: 775c381bce900d240a8663ecbc3ab05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numRooms: 25
-  combatRoomsPercentage: 5
-  startPosition: {x: 0, y: 0}
-  startDirections: -1
-  roomAssets: {fileID: 11400000, guid: 29af32f18c51edf44918d3b20969c6ed, type: 2}
+  config:
+    roomPrefab: {fileID: 4421667511310642930, guid: 6c2700e06a1f3f54ab2e72e684063a08, type: 3}
+    positionOffset: 10
+    scale: 2
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,7 +224,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -268,6 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attenuationObject: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

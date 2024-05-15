@@ -62,5 +62,5 @@ public class Room
         return (lockedDoors & direction) != 0;
     }
 
-    public override string ToString() => $"Room at {position}";
+    public override string ToString() => $"Room ({roomType}) at {position}";
 }

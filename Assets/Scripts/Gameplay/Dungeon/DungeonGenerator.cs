@@ -4,30 +4,25 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class DungeonGenerator : MonoBehaviour
+public class DungeonGenerator
 {
     public int numRooms = 20;
     public int combatRoomsPercentage = 5;
     public int capRoomPercentage = 25;
     public Vector2Int startPosition = Vector2Int.zero;
     public Direction startDirections = Direction.All;
-    public RoomAssets roomAssets;
-    private Dictionary<Vector2Int, Room> rooms = new Dictionary<Vector2Int, Room>();
+    public Dictionary<Vector2Int, Room> rooms = new Dictionary<Vector2Int, Room>();
 
 
     private Room startRoom;
     private Room bossRoom;
 
-    void Start()
+    public void Generate()
     {
         if ((int)startDirections == -1)
             startDirections = Direction.All;
 
-        roomAssets.CreateSpriteLookup();
         GenerateDungeon();
-
-        foreach (var room in rooms.Values)
-            CreateRoom(room);
     }
 
     void GenerateDungeon()
@@ -198,21 +193,5 @@ public class DungeonGenerator : MonoBehaviour
             selectedRoom.roomType = roomType;
             processed.Add(selectedRoom);
         }
-    }
-
-    // This should go in RoomManager
-    public void CreateRoom(Room room)
-    {
-        var renderer = new GameObject(room.roomType.ToString(), typeof(SpriteRenderer))
-            .GetComponent<SpriteRenderer>();
-        
-        if (roomAssets.spriteLookup.TryGetValue(room.entrances, out Sprite sprite))
-        {   
-            renderer.sprite = sprite;
-            renderer.transform.position = room.position.AsVector3();
-            renderer.transform.SetParent(this.transform);
-        }
-        else
-            Debug.Log($"Didn't find sprite for {room} with {room.entrances}");
     }
 }
