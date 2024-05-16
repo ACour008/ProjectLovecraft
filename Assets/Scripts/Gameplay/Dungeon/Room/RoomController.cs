@@ -37,11 +37,12 @@ public class RoomController : MonoBehaviour
     public void Init(Room room, RoomConfig config)
     {
         this.room = room;
-        this.name = room.ToString();
+        name = room.ToString();
         SetRoomWalls();
 
-        transform.position = new Vector3(room.position.x, room.position.y, 0) * config.positionOffset;
-        transform.localScale = Vector3.one * config.scale;
+        transform.position = config.GetWorldPosition(room.position);
+        transform.localScale = config.GetLocalScale();
+        
 
         foreach (Direction direction in Enum.GetValues(typeof(Direction)))
         {

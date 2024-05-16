@@ -1,34 +1,47 @@
 using System;
+using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
-
-
-
-// Maybe turn to ScriptableObject
-[Serializable]
-public struct RoomConfig
-{
-    [SerializeField] public GameObject roomPrefab;
-    [SerializeField] public float positionOffset;
-    [SerializeField] public float scale;
-
-}
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class RoomManager : MonoBehaviour
 {
-    public RoomConfig config;
+    public RoomConfig roomConfig { get; set; }
     private DungeonGenerator generator = new DungeonGenerator();
+    public GameObject dungeon;
 
-    void Start()
+    public Task LoadAssets()
+    {
+        TaskCompletionSource<bool> source = new TaskCompletionSource<bool>();
+        LoadAssets(source);
+        return source.Task;
+    }
+    async void LoadAssets(TaskCompletionSource<bool> source)
+    {
+        AsyncOperationHandle handle = Addressables.LoadAssetAsync<RoomConfig>("RoomConfig");
+        await handle.Task;
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+            roomConfig = (RoomConfig)handle.Result;
+
+        Addressables.Release(handle);
+        source.SetResult(true);
+    }
+
+    public void Generate()
     {
         generator.Generate();
+
+        dungeon = new GameObject("Dungeon");
 
         foreach (Room room in generator.rooms.Values)
             CreateRoom(room);
     }
     public void CreateRoom(Room room)
     {
-        RoomController roomController = Instantiate(config.roomPrefab, transform).GetComponent<RoomController>();
-        roomController.Init(room, config);
+        RoomController roomController = Instantiate(roomConfig.roomPrefab, dungeon.transform).GetComponent<RoomController>();
+        roomController.Init(room, roomConfig);
 
         if (room.roomType == RoomType.Start)
             AddWaypoint(WaypointType.Player, roomController);
