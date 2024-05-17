@@ -1,6 +1,4 @@
-using System;
 using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -10,6 +8,7 @@ public class RoomManager : MonoBehaviour
     public RoomConfig roomConfig { get; set; }
     private DungeonGenerator generator = new DungeonGenerator();
     public GameObject dungeon;
+
 
     public Task LoadAssets()
     {
@@ -57,7 +56,7 @@ public class RoomManager : MonoBehaviour
         {
             float chance = UnityEngine.Random.Range(0, 1);
             if (chance < 0.75f)
-                AddMobSpawners();
+                AddMobSpawners(room);
         }
     }
 
@@ -72,8 +71,8 @@ public class RoomManager : MonoBehaviour
         waypoint.transform.position = room.transform.position;
     }
 
-    public void AddMobSpawners()
+    public void AddMobSpawners(Room room)
     {
-
+        
     }
 }

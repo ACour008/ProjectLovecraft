@@ -64,6 +64,9 @@ public class Room
     [HideInInspector] public Direction lockedDoors;
     public RoomType roomType;
 
+    List<Enemy> enemies = new List<Enemy>();
+
+
     public Room(Vector2Int position, Direction entrances)
     {
         this.position = position;
@@ -77,6 +80,20 @@ public class Room
         this.entrances = entrances;
         this.lockedDoors = lockedDoors;
         roomType = RoomType.Normal;
+    }
+
+    public int GetEnemyCount() => enemies.Count;
+
+    public void AddEnemy(Enemy enemy)
+    {
+        enemies.Add(enemy);
+        // OnEnemyAdded event
+    }
+
+    public void RemoveEnemy(Enemy enemy)
+    {
+        enemies.Remove(enemy);
+        // OnEnemyRemoved event
     }
 
     public void LockDoor(Direction direction)

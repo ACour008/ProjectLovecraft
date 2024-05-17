@@ -67,7 +67,7 @@ public class StandardGameMode : GameMode
                 mousePosition = shell.uiManager.camera.ScreenToWorldPoint(mousePosition);
                 Vector3 direction = mousePosition.AsVector3() - child.position;
                 float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                child.rotation = Quaternion.AngleAxis(angle + 90, child.forward);
+                child.rotation = Quaternion.AngleAxis(angle - 90, child.forward);
             }
             else
             {
