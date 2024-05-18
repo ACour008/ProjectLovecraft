@@ -5,9 +5,12 @@ using UnityEngine;
 
 public abstract class WorldActor : MonoBehaviour
 {
+    public CharacterProfile profile;
     public List<Weapon> inventory = new List<Weapon>();
     public Weapon currentWeapon;
     public Weapon secondaryWeapon;
+
+    public Transform currentTarget;
 
     public TreasureChest nearbyChest { get; set; }
 

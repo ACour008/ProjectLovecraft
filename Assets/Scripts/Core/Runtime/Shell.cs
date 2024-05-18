@@ -66,11 +66,6 @@ public class Shell : MonoBehaviour
         Addressables.Release(handle);
         loadState++;
     }
-    
-    void OnDisable()
-    {
-        gameModeManager.EndPlayMode();
-    }
 
     void Update()
     {

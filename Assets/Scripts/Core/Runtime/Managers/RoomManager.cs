@@ -50,22 +50,6 @@ public class RoomManager : MonoBehaviour
         rooms[room] = roomController;
     }
 
-    public void AddWaypoint(WaypointType type, RoomController room, float radius = 0)
-    {
-        Waypoint waypoint = new GameObject($"Waypoint", typeof(Waypoint))
-            .GetComponent<Waypoint>();
-        
-        waypoint.waypointType = type;
-        waypoint.transform.SetParent(room.transform, false);
-        // To do: Create random position based on given radius (from center);
-        waypoint.transform.position = room.transform.position;
-    }
-
-    public void AddMobSpawners(Room room)
-    {
-        
-    }
-
     public void OnDoorTriggered(RoomController controller, Direction direction)
     {
         if (TryGetNeighbor(controller, direction, out RoomController neighbor))
