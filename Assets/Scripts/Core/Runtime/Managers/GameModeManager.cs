@@ -36,8 +36,8 @@ public class GameModeManager : MonoBehaviour
     // shell.OnDisable
     public void EndPlayMode()
     {
-        while (!(currentMode is NullMode))
-            EndMode(currentMode);
+        // while (!(currentMode is NullMode))
+        //     EndMode(currentMode);
     }
 
     // called in shell again.

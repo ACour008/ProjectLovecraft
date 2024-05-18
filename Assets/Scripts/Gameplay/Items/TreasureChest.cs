@@ -28,6 +28,8 @@ public class TreasureChest : MonoBehaviour, Interactable
 
     void Open(WorldActor player)
     {
+        // check if player is in combat.
+        
         if (!isOpen)
         {
             Debug.Log("Opening chest");

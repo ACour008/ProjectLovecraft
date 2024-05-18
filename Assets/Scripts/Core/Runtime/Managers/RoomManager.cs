@@ -47,24 +47,6 @@ public class RoomManager : MonoBehaviour
     {
         RoomController roomController = Instantiate(roomConfig.roomPrefab, dungeon.transform).GetComponent<RoomController>();
         roomController.Init(room, this, roomConfig);
-
-        if (room.roomType == RoomType.Start)
-            AddWaypoint(WaypointType.Player, roomController);
-        else if (room.roomType == RoomType.Boss)
-            AddWaypoint(WaypointType.Boss, roomController);
-        else if (room.roomType == RoomType.Combat)
-            AddWaypoint(WaypointType.Combat, roomController);
-        else if (room.roomType == RoomType.Health)
-            AddWaypoint(WaypointType.Health, roomController);
-        else if (room.roomType == RoomType.Treasure)
-            AddWaypoint(WaypointType.Treasure, roomController);
-        else
-        {
-            float chance = UnityEngine.Random.Range(0, 1);
-            if (chance < 0.75f)
-                AddMobSpawners(room);
-        }
-
         rooms[room] = roomController;
     }
 

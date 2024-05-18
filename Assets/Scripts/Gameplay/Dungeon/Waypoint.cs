@@ -2,13 +2,16 @@ using UnityEngine;
 
 public enum WaypointType
 {
-    Player,
+    PlayerStart,
+    PlayerEnter,
     Boss,
-    Combat,
-    Health,
-    Treasure,
+    RoomSpecific,
+    None,
 }
+
 public class Waypoint : MonoBehaviour
 {
     public WaypointType waypointType;
+    public int spawnRadius;
+
 }

@@ -29,7 +29,7 @@ public class LootManager : MonoBehaviour
             allWeapons = ((LootPool)handle.Result).weapons;
             availableWeapons = allWeapons;
         }
-        
+
         Addressables.Release(handle);
         source.SetResult(true);
     }
@@ -44,10 +44,6 @@ public class LootManager : MonoBehaviour
         int index = Random.Range(0, availableWeapons.Count);
         WeaponProfile selectedProfile = availableWeapons[index];
         availableWeapons.RemoveAt(index);
-
-        Debug.Log("AVAILABLE WEAPONS");
-        foreach (WeaponProfile wp in availableWeapons)
-            Debug.Log($"  {wp}");
 
         if (selectedProfile.bulletPrefab != null)
             return new PrefabShotWeapon(selectedProfile, firePoint);

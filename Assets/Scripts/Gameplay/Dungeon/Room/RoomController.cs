@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [Serializable]
 public class RoomWall
@@ -10,7 +12,7 @@ public class RoomWall
     [SerializeField] GameObject open;
     [SerializeField] GameObject door;
     [SerializeField] public Waypoint start;
-    
+
     public void SetOpen()
     {
         closed.SetActive(false);
@@ -33,8 +35,33 @@ public class RoomController : MonoBehaviour
     [SerializeField] public RoomWall eastWall;
     [SerializeField] public RoomWall southWall;
     [SerializeField] public RoomWall westWall;
+    
+    [SerializeField] GameObject treasureChestPrefab;
 
     Dictionary<Direction, RoomWall> roomWalls = new Dictionary<Direction, RoomWall>();
+    public List<Waypoint> waypoints = new List<Waypoint>();
+
+    WaypointType waypointType
+    {
+        get
+        {
+            switch(room.roomType)
+            {
+                case RoomType.Start:
+                    return WaypointType.PlayerStart;
+                case RoomType.Normal:
+                    return WaypointType.None;
+                case RoomType.Boss:
+                    return WaypointType.Boss;
+                case RoomType.Health:
+                case RoomType.Combat:
+                case RoomType.Treasure:
+                    return WaypointType.RoomSpecific;
+                default:
+                    return WaypointType.None;
+            }
+        }
+    }
 
     public void Init(Room room, RoomManager manager, RoomConfig config)
     {
@@ -46,7 +73,6 @@ public class RoomController : MonoBehaviour
         transform.position = config.GetWorldPosition(room.position);
         transform.localScale = config.GetLocalScale();
         
-
         foreach (Direction direction in Enum.GetValues(typeof(Direction)))
         {
             if (direction == Direction.None || direction == Direction.All)
@@ -57,6 +83,9 @@ public class RoomController : MonoBehaviour
             else
                 roomWalls[direction].SetClosed();
         }
+
+        CollectWaypoints();
+        SpawnItems();
     }
 
     void SetRoomWalls()
@@ -65,6 +94,31 @@ public class RoomController : MonoBehaviour
         roomWalls[Direction.East] = eastWall;
         roomWalls[Direction.South] = southWall;
         roomWalls[Direction.West] = westWall;
+    }
+
+    void CollectWaypoints()
+    {
+        waypoints = FindObjectsByType<Waypoint>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            .Where(x => x.waypointType == waypointType)
+            .ToList();
+    }
+
+    void SpawnItems()
+    {
+        switch(room.roomType)
+        {
+            case RoomType.Treasure:
+                SpawnTreasure();
+                break;
+            default:
+                break;
+        }
+    }
+
+    void SpawnTreasure()
+    {
+        Transform spawnPoint = waypoints[Random.Range(0, waypoints.Count)].transform;
+        Instantiate(treasureChestPrefab, transform.TransformPoint(spawnPoint.localPosition), spawnPoint.rotation, transform);
     }
 
     public RoomWall GetWallAt(Direction direction)
