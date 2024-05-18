@@ -21,8 +21,9 @@ public class Shell : MonoBehaviour
     /* We will see;
     */
     public InputData inputData;
-    public GameObject player;
-    
+    private GameObject _player;
+    public Player player;
+
     LoadState loadState;
 
     [RuntimeInitializeOnLoadMethod]
@@ -83,19 +84,20 @@ public class Shell : MonoBehaviour
 
     public async void LoadPlayer()
     {
-        if (player)
+        if (_player)
             return;
 
         AsyncOperationHandle handle = Addressables.LoadAssetAsync<GameObject>("Player");
         await handle.Task;
 
         if (handle.Status == AsyncOperationStatus.Succeeded)
-            player = (GameObject)handle.Result;
+            _player = (GameObject)handle.Result;
 
         Addressables.Release(handle);
 
-        player = Instantiate(player, Vector3.zero, Quaternion.identity, null);
-        var playerSprite = player.GetComponentInChildren<SpriteRenderer>();
+        _player = Instantiate(_player, Vector3.zero, Quaternion.identity, null);
+        player = _player.GetComponent<Player>();
+        var playerSprite = _player.GetComponentInChildren<SpriteRenderer>();
         playerSprite.sortingLayerName = "Default";
         playerSprite.sortingOrder = 999;
     }

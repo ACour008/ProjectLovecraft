@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f99f17faf4b1db04c955e56babaa73f4, type: 3}
+  m_Name: TestBulletWeapon
+  m_EditorClassIdentifier: 
+  usesRaycast: 0
+  weaponName: TestWeapon
+  damage: 5
+  startingRounds: 10
+  maxRounds: 20
+  bulletPrefab: {fileID: 2361965461206505025, guid: 59b3cf7cbc6f9924486c6b136fdc82ab, type: 3}
+  lineRendererPrefab: {fileID: 0}
+  lineLength: 0

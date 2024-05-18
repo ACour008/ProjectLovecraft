@@ -6,15 +6,9 @@ public class Enemy : WorldActor
 {
     CharacterProfile profile;
 
-    // Start is called before the first frame update
-    void Start()
+    public override void TakeDamage(int damage)
     {
-        
+        base.TakeDamage(damage);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

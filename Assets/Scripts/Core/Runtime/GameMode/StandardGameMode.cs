@@ -36,6 +36,7 @@ public class StandardGameMode : GameMode
         InputData gameInput = Shell.instance.inputData;
         gameInput.game.pause.performed += OnPause;
         gameInput.game.interact.performed += OnInteract;
+        gameInput.game.fire.performed += OnFire;
     }
 
     public override void OnDeactivate()
@@ -54,11 +55,17 @@ public class StandardGameMode : GameMode
     void OnPause(InputAction.CallbackContext context)
     {
         Debug.Log("Paused");
+        shell.player.DEBUG_ChangeWeapon();
     }
 
     void OnInteract(InputAction.CallbackContext context)
     {
-        Debug.Log("Interact");
+        shell.player.Interact();
+    }
+
+    void OnFire(InputAction.CallbackContext context)
+    {
+        shell.player.Fire();
     }
 
     public override void OnUpdate()
@@ -122,7 +129,7 @@ public class StandardGameMode : GameMode
     void MovePlayerToRoom(RoomController controller, Direction direction)
     {
         inputActionMap.Disable();
-        shell.player.SetActive(false);
+        shell.player.gameObject.SetActive(false);
         RoomWall wall = controller.GetWallAt(direction);
         
         if (wall != null && wall.start != null)
@@ -136,7 +143,7 @@ public class StandardGameMode : GameMode
 
     void OnCameraControllerTransitionEnd()
     {
-        shell.player.SetActive(true);
+        shell.player.gameObject.SetActive(true);
         inputActionMap.Enable();
     }
 }
