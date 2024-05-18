@@ -14,8 +14,8 @@ public class DungeonGenerator
     public Dictionary<Vector2Int, Room> rooms = new Dictionary<Vector2Int, Room>();
 
 
-    private Room startRoom;
-    private Room bossRoom;
+    public Room startRoom;
+    public Room bossRoom;
 
     public void Generate()
     {

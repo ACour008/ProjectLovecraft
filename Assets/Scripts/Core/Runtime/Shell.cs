@@ -12,6 +12,7 @@ public class Shell : MonoBehaviour
     public RoomManager roomManager;
     public UIManager uiManager;
     public GameModeManager gameModeManager;
+    public CameraManager cameraManager;
     
     /* Could put this in to a game data w/ all assets that need to be loaded.
     /* - input data
@@ -32,13 +33,15 @@ public class Shell : MonoBehaviour
             typeof(Shell),
             typeof(RoomManager),
             typeof(UIManager),
-            typeof(GameModeManager)).GetComponent<Shell>();
+            typeof(GameModeManager),
+            typeof(CameraManager)).GetComponent<Shell>();
 
         DontDestroyOnLoad(instance.gameObject);
 
         instance.roomManager = instance.gameObject.GetComponent<RoomManager>();
         instance.uiManager = instance.gameObject.GetComponent<UIManager>();
         instance.gameModeManager = instance.gameObject.GetComponent<GameModeManager>();
+        instance.cameraManager = instance.gameObject.GetComponent<CameraManager>();
 
         instance.LoadAllAssets();
     }
@@ -74,6 +77,7 @@ public class Shell : MonoBehaviour
         if (loadState == LoadState.Done)
         {
             gameModeManager.OnUpdate();
+            cameraManager.OnUpdate();
         }
     }
 

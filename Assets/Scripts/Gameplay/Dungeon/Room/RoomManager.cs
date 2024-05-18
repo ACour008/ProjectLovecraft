@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -8,7 +10,9 @@ public class RoomManager : MonoBehaviour
     public RoomConfig roomConfig { get; set; }
     private DungeonGenerator generator = new DungeonGenerator();
     public GameObject dungeon;
+    public Dictionary<Room, RoomController> rooms = new Dictionary<Room, RoomController>();
 
+    public event Action<RoomController, Direction> DoorTriggered;
 
     public Task LoadAssets()
     {
@@ -34,13 +38,14 @@ public class RoomManager : MonoBehaviour
 
         dungeon = new GameObject("Dungeon");
 
+        // CreateRoom(generator.startRoom);
         foreach (Room room in generator.rooms.Values)
             CreateRoom(room);
     }
     public void CreateRoom(Room room)
     {
         RoomController roomController = Instantiate(roomConfig.roomPrefab, dungeon.transform).GetComponent<RoomController>();
-        roomController.Init(room, roomConfig);
+        roomController.Init(room, this, roomConfig);
 
         if (room.roomType == RoomType.Start)
             AddWaypoint(WaypointType.Player, roomController);
@@ -58,6 +63,8 @@ public class RoomManager : MonoBehaviour
             if (chance < 0.75f)
                 AddMobSpawners(room);
         }
+
+        rooms[room] = roomController;
     }
 
     public void AddWaypoint(WaypointType type, RoomController room, float radius = 0)
@@ -74,5 +81,18 @@ public class RoomManager : MonoBehaviour
     public void AddMobSpawners(Room room)
     {
         
+    }
+
+    public void OnDoorTriggered(RoomController controller, Direction direction)
+    {
+        if (TryGetNeighbor(controller, direction, out RoomController neighbor))
+            DoorTriggered?.Invoke(neighbor, direction);
+        else
+            Debug.LogError($"Neighbor {direction} not found");
+    }
+
+    public bool TryGetNeighbor(RoomController controller, Direction direction, out RoomController neighbor)
+    {
+        return rooms.TryGetValue(controller.room.neighbors[direction], out neighbor);
     }
 }

@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public struct RoomWall
+public class RoomWall
 {
     [SerializeField] GameObject closed;
     [SerializeField] GameObject open;
     [SerializeField] GameObject door;
+    [SerializeField] public Waypoint start;
     
     public void SetOpen()
     {
@@ -25,7 +26,8 @@ public struct RoomWall
 
 public class RoomController : MonoBehaviour
 {
-    Room room;
+    public Room room { get; private set; }
+    RoomManager manager;
 
     [SerializeField] public RoomWall northWall;
     [SerializeField] public RoomWall eastWall;
@@ -34,9 +36,10 @@ public class RoomController : MonoBehaviour
 
     Dictionary<Direction, RoomWall> roomWalls = new Dictionary<Direction, RoomWall>();
 
-    public void Init(Room room, RoomConfig config)
+    public void Init(Room room, RoomManager manager, RoomConfig config)
     {
         this.room = room;
+        this.manager = manager;
         name = room.ToString();
         SetRoomWalls();
 
@@ -49,10 +52,10 @@ public class RoomController : MonoBehaviour
             if (direction == Direction.None || direction == Direction.All)
                 continue;
 
-            if ((room.entrances & direction) == 0)
-                roomWalls[direction].SetClosed();
-            else
+            if (HasEntrance(direction))
                 roomWalls[direction].SetOpen();
+            else
+                roomWalls[direction].SetClosed();
         }
     }
 
@@ -62,5 +65,22 @@ public class RoomController : MonoBehaviour
         roomWalls[Direction.East] = eastWall;
         roomWalls[Direction.South] = southWall;
         roomWalls[Direction.West] = westWall;
+    }
+
+    public RoomWall GetWallAt(Direction direction)
+    {
+        if (HasEntrance(direction) && roomWalls.TryGetValue(direction, out RoomWall wall))
+            return wall;
+        return null;
+    }
+
+    public bool HasEntrance(Direction direction)
+    {
+        return room.HasEntrance(direction);
+    }
+
+    public void OnDoorTriggered(Direction direction)
+    {
+        manager.OnDoorTriggered(this, direction);
     }
 }

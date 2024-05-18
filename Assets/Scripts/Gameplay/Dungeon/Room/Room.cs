@@ -96,6 +96,11 @@ public class Room
         // OnEnemyRemoved event
     }
 
+    public bool HasEntrance(Direction direction)
+    {
+        return (entrances & direction) == direction;
+    }
+
     public void LockDoor(Direction direction)
     {
         lockedDoors |= direction;

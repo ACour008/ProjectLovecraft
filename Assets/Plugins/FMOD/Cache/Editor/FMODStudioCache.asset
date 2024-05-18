@@ -1,5 +1,45 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5596615976620140915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: fmod/proejectLovecraft/Build/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 638515395046390114
+  FileSizes:
+  - Name: Desktop
+    Value: 1574
+  Exists: 1
+--- !u!114 &-4914996466853686821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: fmod/proejectLovecraft/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 638515395046390114
+  FileSizes:
+  - Name: Desktop
+    Value: 754
+  Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13,18 +53,18 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: 6966772777977965233}
-  - {fileID: 6593801432945270909}
+  - {fileID: -4914996466853686821}
+  - {fileID: -5596615976620140915}
   EditorEvents:
-  - {fileID: 3291361868732419645}
+  - {fileID: 5234708226114872912}
   EditorParameters: []
   MasterBanks:
-  - {fileID: 6593801432945270909}
+  - {fileID: -5596615976620140915}
   StringsBanks:
-  - {fileID: 6966772777977965233}
-  cacheTime: 638515413000651903
+  - {fileID: -4914996466853686821}
+  cacheTime: 638515395046390114
   cacheVersion: 131618
---- !u!114 &3291361868732419645
+--- !u!114 &5234708226114872912
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,7 +83,7 @@ MonoBehaviour:
     Data3: -1258709883
     Data4: -2138904832
   Banks:
-  - {fileID: 6593801432945270909}
+  - {fileID: -5596615976620140915}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -51,43 +91,3 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &6593801432945270909
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Master.bank
-  m_EditorClassIdentifier: 
-  Path: fmod/proejectLovecraft/Build/Desktop/Master.bank
-  Name: Master
-  StudioPath: bank:/Master
-  lastModified: 638515413000641891
-  FileSizes:
-  - Name: Desktop
-    Value: 1574
-  Exists: 1
---- !u!114 &6966772777977965233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Master.strings.bank
-  m_EditorClassIdentifier: 
-  Path: fmod/proejectLovecraft/Build/Desktop/Master.strings.bank
-  Name: Master.strings
-  StudioPath: bank:/Master.strings
-  lastModified: 638515413000651903
-  FileSizes:
-  - Name: Desktop
-    Value: 754
-  Exists: 1
