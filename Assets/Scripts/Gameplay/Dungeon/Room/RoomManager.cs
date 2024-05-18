@@ -20,6 +20,7 @@ public class RoomManager : MonoBehaviour
         LoadAssets(source);
         return source.Task;
     }
+    
     async void LoadAssets(TaskCompletionSource<bool> source)
     {
         AsyncOperationHandle handle = Addressables.LoadAssetAsync<RoomConfig>("RoomConfig");

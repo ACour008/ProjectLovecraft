@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "WeaponProfile", menuName = "Create/Weapon/Weapon Profile")]
+[CreateAssetMenu(fileName = "WeaponProfile", menuName = "Create/Items/Weapon Profile")]
 public class WeaponProfile : ScriptableObject
 {
     public bool usesRaycast;

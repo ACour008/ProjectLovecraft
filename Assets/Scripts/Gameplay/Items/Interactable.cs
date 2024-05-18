@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : WorldActor
+public interface Interactable
 {
+    void OnInteract(WorldActor actor);
 }

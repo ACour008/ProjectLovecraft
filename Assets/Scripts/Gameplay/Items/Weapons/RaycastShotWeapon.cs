@@ -47,4 +47,9 @@ public class RaycastShotWeapon : Weapon
         yield return new WaitForSeconds(profile.blastLifetime);
         lineRenderer.gameObject.SetActive(false);
     }
+
+    public override void OnInteract(WorldActor actor)
+    {
+        actor.AddWeapon(this);
+    }
 }

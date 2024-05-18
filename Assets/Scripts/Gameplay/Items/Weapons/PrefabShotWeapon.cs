@@ -21,4 +21,9 @@ public class PrefabShotWeapon : Weapon
             bullet.weapon = this;
         }
     }
+
+    public override void OnInteract(WorldActor actor)
+    {
+        actor.AddWeapon(this);
+    }
 }

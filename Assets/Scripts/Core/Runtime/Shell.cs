@@ -13,6 +13,7 @@ public class Shell : MonoBehaviour
     public UIManager uiManager;
     public GameModeManager gameModeManager;
     public CameraManager cameraManager;
+    public LootManager lootManager;
     
     /* Could put this in to a game data w/ all assets that need to be loaded.
     /* - input data
@@ -35,7 +36,8 @@ public class Shell : MonoBehaviour
             typeof(RoomManager),
             typeof(UIManager),
             typeof(GameModeManager),
-            typeof(CameraManager)).GetComponent<Shell>();
+            typeof(CameraManager),
+            typeof(LootManager)).GetComponent<Shell>();
 
         DontDestroyOnLoad(instance.gameObject);
 
@@ -43,6 +45,7 @@ public class Shell : MonoBehaviour
         instance.uiManager = instance.gameObject.GetComponent<UIManager>();
         instance.gameModeManager = instance.gameObject.GetComponent<GameModeManager>();
         instance.cameraManager = instance.gameObject.GetComponent<CameraManager>();
+        instance.lootManager = instance.gameObject.GetComponent<LootManager>();
 
         instance.LoadAllAssets();
     }
@@ -50,6 +53,8 @@ public class Shell : MonoBehaviour
     async void LoadAllAssets()
     {
         loadState = LoadState.Loading;
+
+        await lootManager.LoadAssets();
         await roomManager.LoadAssets();
 
         AsyncOperationHandle handle = Addressables.LoadAssetAsync<InputData>("InputData");

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class Weapon
+public abstract class Weapon : Interactable
 {
     public WeaponProfile profile;
     public int damage;
@@ -30,6 +30,8 @@ public abstract class Weapon
 
     }
 
+    public abstract void OnInteract(WorldActor actor);
+
     protected virtual void OnInit() { }
 
     public virtual void OnEquip(WorldActor actor) { }
@@ -38,7 +40,6 @@ public abstract class Weapon
 
     public virtual void Fire()
     {
-        Debug.Log("Fire!");
         if (canFire)
             rounds--;
     }

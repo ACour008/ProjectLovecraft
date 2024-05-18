@@ -93,10 +93,7 @@ public class CameraManager : MonoBehaviour
         {
             transitionTime += Time.deltaTime / transitionSpeed;
             float easedProgress = EaseFunctions.Evaluate(0, 1, transitionTime, transition.easing);
-
-            Debug.Log($"{startPosition}, {targetPosition}, {easedProgress}");
             mainCamera.transform.position = Vector3.Lerp(startPosition, targetPosition, easedProgress);
-            
             if (transitionTime >= 1f)
             {
                 mainCamera.transform.position = targetPosition;
