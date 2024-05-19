@@ -14,10 +14,9 @@ public class StandardGameMode : GameMode
     // Could use this for cutscenes
     public override void OnBegin()
     {
-        Debug.Log($"{this} Begins!");
         shell = Shell.instance;
         shell.roomManager.Generate();
-        shell.roomManager.DoorTriggered += OnDoorTriggered;
+        shell.roomManager.RoomExited += OnExitRoom;
 
         cameraController = new StandardCameraController();
         shell.cameraManager.PushController(cameraController);
@@ -44,12 +43,16 @@ public class StandardGameMode : GameMode
         base.OnDeactivate();
         InputData gameInput = Shell.instance.inputData;
         gameInput.game.pause.performed -= OnPause;
+        gameInput.game.interact.performed -= OnInteract;
+        gameInput.game.fire.performed -= OnFire;
     }
 
     public override void OnEnd()
     {
         base.OnEnd();
         shell.cameraManager.PopController();
+        shell.roomManager.RoomExited -= OnExitRoom;
+        shell.cameraManager.TransitionEnded -= OnCameraControllerTransitionEnd;
     }
 
     void OnPause(InputAction.CallbackContext context)
@@ -99,7 +102,7 @@ public class StandardGameMode : GameMode
         }
     }
 
-    public void OnDoorTriggered(RoomController neighbor, Direction direction)
+    public void OnExitRoom(RoomController neighbor, Direction direction)
     {
         if (IsPlayerExiting(direction))
         {
@@ -145,5 +148,6 @@ public class StandardGameMode : GameMode
     {
         shell.player.gameObject.SetActive(true);
         inputActionMap.Enable();
+        shell.roomManager.OnRoomEntered();
     }
 }

@@ -26,6 +26,11 @@ public class ChaseState : EnemyState
 
     void Chase()
     {
-        behaviour.actor.transform.position = Vector3.MoveTowards(behaviour.actor.transform.position, behaviour.target.position, Time.deltaTime * 1f);
+        behaviour.actor.transform.position = Vector3.MoveTowards
+        (
+            behaviour.actor.transform.position, 
+            behaviour.target.position, 
+            Time.deltaTime * behaviour.movementSpeed
+        );
     }
 }

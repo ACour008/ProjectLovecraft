@@ -13,9 +13,14 @@ public class Enemy : WorldActor
         enemyBehaviour.OnUpdate();
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
-        GizmoCircleDrawer.Draw(transform.position, enemyBehaviour.chaseRange, Color.green);
-        GizmoCircleDrawer.Draw(transform.position, enemyBehaviour.attackRange, Color.red);
+        if (Application.isPlaying)
+        {
+            GizmoCircleDrawer.Draw(transform.position, enemyBehaviour.chaseRange, Color.green);
+            GizmoCircleDrawer.Draw(transform.position, enemyBehaviour.attackRange, Color.red);
+        }
     }
+#endif
 }

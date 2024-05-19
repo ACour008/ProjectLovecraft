@@ -8,6 +8,7 @@ public class EnemyBehaviour
     public Transform target => Shell.instance.player.transform;
     public float chaseRange;
     public float attackRange;
+    public float movementSpeed;
     public List<Attack> attacks = new List<Attack>();
 
     public EnemyBehaviour(WorldActor actor)
@@ -21,6 +22,7 @@ public class EnemyBehaviour
 
     void SetStats(CharacterProfile profile)
     {
+        movementSpeed  = profile.movementSpeed;
         chaseRange = profile.chaseRange;
         attackRange = profile.attackRange;
         attacks = profile.attacks;

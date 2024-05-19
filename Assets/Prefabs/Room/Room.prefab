@@ -1731,6 +1731,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6845376532655102132}
   - component: {fileID: 4592787767636834551}
+  - component: {fileID: 6626900714246821849}
   m_Layer: 0
   m_Name: Room
   m_TagString: Untagged
@@ -1788,7 +1789,32 @@ MonoBehaviour:
     door: {fileID: 0}
     start: {fileID: 5880028039490048042}
   treasureChestPrefab: {fileID: 9204984547757849004, guid: 39d2b38037d806842bef85c4a4df1cb6, type: 3}
+  mobSpawnerPrefab: {fileID: 3495763116388773245, guid: 6fa92d722c1c63345bd97d1bf084f036, type: 3}
   waypoints: []
+  enemySpawner: {fileID: 6626900714246821849}
+--- !u!114 &6626900714246821849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4421667511310642930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41cae703b7928dc4cb0270c4bdf0ed63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSpawnsInRoom: 5
+  spawnRadius: 1
+  spawnPoints:
+  - {fileID: 7851120851173607667}
+  - {fileID: 5774733278545788310}
+  - {fileID: 769972448109435695}
+  - {fileID: 2255402908734562116}
+  - {fileID: 2745126102830973851}
+  allEnemies:
+  - {fileID: 9081478596351055654, guid: 71b98cd0218e95146ae82a7d29ee0995, type: 3}
+  - {fileID: 9081478596351055654, guid: 45f81b91902177d4ca19e0285d9daed8, type: 3}
 --- !u!1 &4723519076663551337
 GameObject:
   m_ObjectHideFlags: 0

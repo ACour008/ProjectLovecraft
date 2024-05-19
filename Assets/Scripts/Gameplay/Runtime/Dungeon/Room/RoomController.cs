@@ -40,6 +40,7 @@ public class RoomController : MonoBehaviour
 
     Dictionary<Direction, RoomWall> roomWalls = new Dictionary<Direction, RoomWall>();
     public List<Waypoint> waypoints = new List<Waypoint>();
+    public EnemySpawner enemySpawner;
 
     WaypointType waypointType
     {
@@ -49,13 +50,12 @@ public class RoomController : MonoBehaviour
             {
                 case RoomType.Start:
                     return WaypointType.PlayerStart;
-                case RoomType.Normal:
-                    return WaypointType.None;
                 case RoomType.Boss:
                     return WaypointType.Boss;
                 case RoomType.Health:
                 case RoomType.Combat:
                 case RoomType.Treasure:
+                case RoomType.Normal:
                     return WaypointType.RoomSpecific;
                 default:
                     return WaypointType.None;
@@ -68,6 +68,7 @@ public class RoomController : MonoBehaviour
         this.room = room;
         this.manager = manager;
         name = room.ToString();
+        enemySpawner = GetComponent<EnemySpawner>();
         SetRoomWalls();
 
         transform.position = config.GetWorldPosition(room.position);
@@ -85,7 +86,6 @@ public class RoomController : MonoBehaviour
         }
 
         CollectWaypoints();
-        SpawnItems();
     }
 
     void SetRoomWalls()
@@ -103,12 +103,18 @@ public class RoomController : MonoBehaviour
             .ToList();
     }
 
-    void SpawnItems()
+    public void CreateItems()
     {
         switch(room.roomType)
         {
             case RoomType.Treasure:
                 SpawnTreasure();
+                break;
+            case RoomType.Combat:
+                SpawnEnemies(100f, 4, 6);
+                break;
+            case RoomType.Normal:
+                SpawnEnemies(0.75f, 1, 4);
                 break;
             default:
                 break;
@@ -117,8 +123,18 @@ public class RoomController : MonoBehaviour
 
     void SpawnTreasure()
     {
+        Spawn(treasureChestPrefab);
+    }
+
+    void SpawnEnemies(float chance, int minSpawns, int maxSpawns)
+    {
+        enemySpawner.Spawn(chance, minSpawns, maxSpawns);
+    }
+
+    GameObject Spawn(GameObject prefab)
+    {
         Transform spawnPoint = waypoints[Random.Range(0, waypoints.Count)].transform;
-        Instantiate(treasureChestPrefab, transform.TransformPoint(spawnPoint.localPosition), spawnPoint.rotation, transform);
+        return Instantiate(prefab, transform.TransformPoint(spawnPoint.localPosition), spawnPoint.rotation, transform);
     }
 
     public RoomWall GetWallAt(Direction direction)

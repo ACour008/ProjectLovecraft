@@ -20,6 +20,7 @@ public class CharacterProfile : ScriptableObject
     public string title;
 
     [Header("AI/Combat")]
+    public float movementSpeed = 1f;
     public int maxHealth;
     public int maxDamage;
     public float chaseRange = 8f;

@@ -11,8 +11,10 @@ public class RoomManager : MonoBehaviour
     private DungeonGenerator generator = new DungeonGenerator();
     public GameObject dungeon;
     public Dictionary<Room, RoomController> rooms = new Dictionary<Room, RoomController>();
+    public RoomController currentRoom;
 
-    public event Action<RoomController, Direction> DoorTriggered;
+    public event Action<RoomController> RoomEntered;
+    public event Action<RoomController, Direction> RoomExited;
 
     public Task LoadAssets()
     {
@@ -39,27 +41,50 @@ public class RoomManager : MonoBehaviour
 
         dungeon = new GameObject("Dungeon");
 
-        // CreateRoom(generator.startRoom);
-        foreach (Room room in generator.rooms.Values)
-            CreateRoom(room);
+        CreateRoom(generator.startRoom);
+        // foreach (Room room in generator.rooms.Values)
+        //     CreateRoom(room);
     }
-    public void CreateRoom(Room room)
+    RoomController CreateRoom(Room room)
     {
         RoomController roomController = Instantiate(roomConfig.roomPrefab, dungeon.transform).GetComponent<RoomController>();
         roomController.Init(room, this, roomConfig);
         rooms[room] = roomController;
+        return roomController;
     }
 
     public void OnDoorTriggered(RoomController controller, Direction direction)
     {
+        // Room already created
         if (TryGetNeighbor(controller, direction, out RoomController neighbor))
-            DoorTriggered?.Invoke(neighbor, direction);
+        {
+            currentRoom = neighbor;
+            RoomExited?.Invoke(neighbor, direction);
+        }
+        // Create room
+        else if (controller.room.neighbors.TryGetValue(direction, out Room nextRoom))
+        {
+            RoomController next = CreateRoom(nextRoom);
+            currentRoom = next;
+            RoomExited?.Invoke(next, direction);
+        }
         else
+            // Slam door shut w/ some screen shake.
             Debug.LogError($"Neighbor {direction} not found");
     }
 
     public bool TryGetNeighbor(RoomController controller, Direction direction, out RoomController neighbor)
     {
         return rooms.TryGetValue(controller.room.neighbors[direction], out neighbor);
+    }
+
+    public void OnRoomEntered()
+    {
+        currentRoom.CreateItems();
+        RoomEntered?.Invoke(currentRoom);
+    }
+    public void OnRoomExited(RoomController neighbor, Direction direction)
+    {
+        RoomExited?.Invoke(neighbor, direction);
     }
 }
