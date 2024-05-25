@@ -20,8 +20,8 @@ public static class Layers
     public const int Water = 4;
     public const int UI = 5;
     public const int Wall = 6;
-    public const int CombatZone = 7;
-    public const int LeaveTrigger = 8;
+    public const int WorldActor = 7;
+    public const int Interactable = 8;
 }
 public static class LayerMasks
 {
@@ -32,6 +32,6 @@ public static class LayerMasks
     public const int Water = 1 << Layers.Water;
     public const int UI = 1 << Layers.UI;
     public const int Wall = 1 << Layers.Wall;
-    public const int CombatZone = 1 << Layers.CombatZone;
-    public const int LeaveTrigger = 1 << Layers.LeaveTrigger;
+    public const int WorldActor = 1 << Layers.WorldActor;
+    public const int Interactable = 1 << Layers.Interactable;
 }

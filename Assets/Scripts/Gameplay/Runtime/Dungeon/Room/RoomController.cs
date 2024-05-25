@@ -1,46 +1,22 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-[Serializable]
-public class RoomWall
-{
-    [SerializeField] GameObject closed;
-    [SerializeField] GameObject open;
-    [SerializeField] GameObject door;
-    [SerializeField] public Waypoint start;
-
-    public void SetOpen()
-    {
-        closed.SetActive(false);
-        open.SetActive(true);
-    }
-
-    public void SetClosed()
-    {
-        closed.SetActive(true);
-        open.SetActive(false);
-    }
-}
 
 public class RoomController : MonoBehaviour
 {
     public Room room { get; private set; }
-    RoomManager manager;
+    DungeonManager manager;
 
-    [SerializeField] public RoomWall northWall;
-    [SerializeField] public RoomWall eastWall;
-    [SerializeField] public RoomWall southWall;
-    [SerializeField] public RoomWall westWall;
-    
-    [SerializeField] GameObject treasureChestPrefab;
-
-    Dictionary<Direction, RoomWall> roomWalls = new Dictionary<Direction, RoomWall>();
-    public List<Waypoint> waypoints = new List<Waypoint>();
+    Dictionary<Direction, Wall> walls = new Dictionary<Direction, Wall>();
+    public Waypoint playerStartWaypoint;
+    public List<Waypoint> roomSpawnPoints;
+    public List<Waypoint> bossStartWaypoints;
     public EnemySpawner enemySpawner;
+    public WeaponChestSpawner weaponChestSpawner;
+    public bool isActiveRoom;
 
     WaypointType waypointType
     {
@@ -63,7 +39,7 @@ public class RoomController : MonoBehaviour
         }
     }
 
-    public void Init(Room room, RoomManager manager, RoomConfig config)
+    public void Init(Room room, DungeonManager manager, RoomConfig config)
     {
         this.room = room;
         this.manager = manager;
@@ -80,66 +56,58 @@ public class RoomController : MonoBehaviour
                 continue;
 
             if (HasEntrance(direction))
-                roomWalls[direction].SetOpen();
+                walls[direction].SetOpen();
             else
-                roomWalls[direction].SetClosed();
+                walls[direction].SetClosed();
         }
 
-        CollectWaypoints();
+        AssignWaypoints();
     }
 
     void SetRoomWalls()
     {
-        roomWalls[Direction.North] = northWall;
-        roomWalls[Direction.East] = eastWall;
-        roomWalls[Direction.South] = southWall;
-        roomWalls[Direction.West] = westWall;
+        Wall[] wallComponents = GetComponentsInChildren<Wall>();
+        foreach (Wall wall in wallComponents)
+        {
+            if (wall.direction == Direction.All || wall.direction == Direction.None)
+            {
+                Debug.LogWarning($"Wall in {this.room} improperly set. Needs one explicit direction");
+                continue;
+            }
+
+            walls[wall.direction] = wall;
+        }
     }
 
-    void CollectWaypoints()
+    void AssignWaypoints()
     {
-        waypoints = FindObjectsByType<Waypoint>(FindObjectsInactive.Include, FindObjectsSortMode.None)
-            .Where(x => x.waypointType == waypointType)
-            .ToList();
+        weaponChestSpawner.AddSpawnPoints(roomSpawnPoints);
+        enemySpawner.AddSpawnPoints(roomSpawnPoints);
     }
 
     public void CreateItems()
     {
+        Debug.Log("CreateItems");
         switch(room.roomType)
         {
             case RoomType.Treasure:
-                SpawnTreasure();
+                weaponChestSpawner.Spawn(100f, 1, 1);
                 break;
             case RoomType.Combat:
-                SpawnEnemies(100f, 4, 6);
+                enemySpawner.Spawn(100f, 4, 6);
                 break;
             case RoomType.Normal:
-                SpawnEnemies(0.75f, 1, 4);
+                enemySpawner.Spawn(0.5f, 1, 4);
                 break;
             default:
                 break;
         }
     }
 
-    void SpawnTreasure()
-    {
-        Spawn(treasureChestPrefab);
-    }
 
-    void SpawnEnemies(float chance, int minSpawns, int maxSpawns)
+    public Wall GetWallAt(Direction direction)
     {
-        enemySpawner.Spawn(chance, minSpawns, maxSpawns);
-    }
-
-    GameObject Spawn(GameObject prefab)
-    {
-        Transform spawnPoint = waypoints[Random.Range(0, waypoints.Count)].transform;
-        return Instantiate(prefab, transform.TransformPoint(spawnPoint.localPosition), spawnPoint.rotation, transform);
-    }
-
-    public RoomWall GetWallAt(Direction direction)
-    {
-        if (HasEntrance(direction) && roomWalls.TryGetValue(direction, out RoomWall wall))
+        if (HasEntrance(direction) && walls.TryGetValue(direction, out Wall wall))
             return wall;
         return null;
     }
@@ -152,5 +120,16 @@ public class RoomController : MonoBehaviour
     public void OnDoorTriggered(Direction direction)
     {
         manager.OnDoorTriggered(this, direction);
+    }
+
+    public void OnRoomEntered()
+    {
+        CreateItems();
+        isActiveRoom = true;
+    }
+
+    public void OnRoomExited()
+    {
+        isActiveRoom = false;
     }
 }

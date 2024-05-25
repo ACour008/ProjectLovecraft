@@ -12,9 +12,9 @@ TagManager:
   - Water
   - UI
   - Wall
-  - Treasure
-  - Health
-  - Enemy_Boss
+  - WorldActor
+  - Interactable
+  - 
   - 
   - 
   - 
@@ -40,4 +40,22 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Dungeon
+    uniqueID: 578710835
+    locked: 0
+  - name: Interactables
+    uniqueID: 1058067339
+    locked: 0
+  - name: Bullet
+    uniqueID: 4215531359
+    locked: 0
+  - name: Enemy
+    uniqueID: 1107836937
+    locked: 0
+  - name: Player
+    uniqueID: 2828651995
+    locked: 0
+  - name: DungeonTop
+    uniqueID: 2798782843
     locked: 0

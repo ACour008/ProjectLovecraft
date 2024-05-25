@@ -22,11 +22,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 04016b1ccf7874e438b53398b1a3fa38
-    m_Address: RoomConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f1ed3727e4d362f438ad12055e68d42f
     m_Address: Player
     m_ReadOnly: 0
@@ -34,6 +29,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3735fd30ac668174595d715cee7711ee
     m_Address: WeaponLootPool
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 04016b1ccf7874e438b53398b1a3fa38
+    m_Address: RoomConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

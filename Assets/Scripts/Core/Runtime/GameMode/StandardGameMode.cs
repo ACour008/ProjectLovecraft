@@ -132,12 +132,11 @@ public class StandardGameMode : GameMode
     void MovePlayerToRoom(RoomController controller, Direction direction)
     {
         inputActionMap.Disable();
-        shell.player.gameObject.SetActive(false);
-        RoomWall wall = controller.GetWallAt(direction);
+        Wall wall = controller.GetWallAt(direction);
         
-        if (wall != null && wall.start != null)
+        if (wall != null && wall.entranceStart != null)
         {
-            Transform start = wall.start.transform;
+            Transform start = wall.entranceStart.transform;
             Vector3 waypointWorldPosition = controller.transform.TransformPoint(start.localPosition);
             shell.player.transform.position = waypointWorldPosition;
             shell.player.transform.rotation = start.localRotation;

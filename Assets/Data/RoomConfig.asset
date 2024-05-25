@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: RoomConfig
   m_EditorClassIdentifier: 
   roomPrefab: {fileID: 4421667511310642930, guid: 6c2700e06a1f3f54ab2e72e684063a08, type: 3}
-  roomSize: 1024
-  roomPixelsPerUnit: 200
-  screenHeight: 0
-  screenWidth: 0
+  roomSize: {x: 1920, y: 1080}
+  roomPixelsPerUnit: 100

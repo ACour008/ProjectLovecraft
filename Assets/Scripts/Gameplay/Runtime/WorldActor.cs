@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 
 public abstract class WorldActor : MonoBehaviour
@@ -12,7 +13,7 @@ public abstract class WorldActor : MonoBehaviour
 
     public Transform currentTarget;
 
-    public TreasureChest nearbyChest { get; set; }
+    public WeaponsChest nearbyChest { get; set; }
 
     public Transform firePoint;
     [SerializeField] LineRenderer _weaponLineRenderer;
@@ -24,7 +25,6 @@ public abstract class WorldActor : MonoBehaviour
     }
     public virtual void TakeDamage(int damage)
     {
-        
     }
 
     public void Fire()

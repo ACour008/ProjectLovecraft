@@ -6,15 +6,15 @@ using UnityEngine;
 public class RoomConfig : ScriptableObject
 {
     public GameObject roomPrefab;
-    public float roomSize;
+    public Vector2 roomSize;
     public float roomPixelsPerUnit;
 
     public Vector3 GetLocalScale()
     {
         return new Vector3
         (
-            Shell.instance.uiManager.screenWidth / (roomSize / roomPixelsPerUnit),
-            Shell.instance.uiManager.screenHeight / (roomSize / roomPixelsPerUnit),
+            Shell.instance.uiManager.screenWidth / (roomSize.x / roomPixelsPerUnit),
+            Shell.instance.uiManager.screenHeight / (roomSize.y / roomPixelsPerUnit),
             1f
         );
     }
@@ -25,8 +25,8 @@ public class RoomConfig : ScriptableObject
 
         return new Vector3
         (
-            dungeonCoordinates.x * (roomSize / roomPixelsPerUnit) * localScale.x,
-            dungeonCoordinates.y * (roomSize / roomPixelsPerUnit) * localScale.y,
+            dungeonCoordinates.x * (roomSize.x / roomPixelsPerUnit) * localScale.x,
+            dungeonCoordinates.y * (roomSize.y / roomPixelsPerUnit) * localScale.y,
             0
         ); 
     }
